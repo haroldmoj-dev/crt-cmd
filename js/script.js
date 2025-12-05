@@ -59,7 +59,9 @@ function processCommand(cmd) {
   if (lower === "help") {
     return "Available commands: help, clear, echo [text], date";
   } else if (lower === "clear") {
-    output.innerHTML = "";
+    while (output.children.length > 2) {
+      output.removeChild(output.lastChild);
+    }
     return "";
   } else if (lower.startsWith("echo ")) {
     return cmd.substring(5);
