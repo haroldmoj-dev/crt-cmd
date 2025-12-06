@@ -76,7 +76,6 @@ html {
 /* CRT effect */
 
 body {
-  overflow: hidden;
   background: #0a0a0a;
   display: flex;
   justify-content: center;
@@ -86,35 +85,37 @@ body {
 .crt-container {
   margin: clamp(49px, calc(43.824px + 1.618vw), 60px) 20px;
   width: 40rem;
-  height: 80vh;
-  min-height: 400px;
+  height: 40rem;
   background: #000;
-  border-radius: 1.1rem;
+  border-radius: 1.2rem;
   padding: 1.75rem;
   box-shadow: 0 0 6.25rem rgba(0, 255, 100, 0.3);
 }
 
 .crt-screen {
+  position: relative;
   width: 100%;
   height: 100%;
+  padding: 1.25rem;
   background: #000;
 }
 
 .crt-content {
   width: 100%;
   height: 100%;
-  padding: 1.25rem;
   color: #00ff00;
   font-size: 1rem;
-  line-height: 1.6;
   z-index: 1;
-  overflow-y: auto;
-  will-change: transform;
+  overflow-y: scroll;
+  will-change: transform; /* TODO: Check this later */
 }
 
 /* Optimized scanlines using single background */
 .crt-screen::before {
   content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: repeating-linear-gradient(
@@ -130,7 +131,7 @@ body {
       rgba(0, 0, 0, 0.3) 100%
     );
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Enhanced flicker - only changes opacity */
@@ -142,9 +143,9 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(18, 16, 16, 0.15);
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
-  z-index: 3;
+  z-index: 2;
   animation: flicker 0.08s infinite;
   will-change: opacity;
 }
@@ -167,14 +168,14 @@ body {
   will-change: opacity;
 }
 
-@keyframes glow {
+/* @keyframes glow {
   0% {
     opacity: 0.7;
   }
   100% {
     opacity: 1;
   }
-}
+} */
 
 /* Subtle RGB shift */
 .crt-content,
@@ -184,7 +185,7 @@ body {
 }
 
 /* Enhanced flicker with more variation */
-@keyframes flicker {
+/* @keyframes flicker {
   0% {
     opacity: 0.32;
   }
@@ -218,10 +219,10 @@ body {
   100% {
     opacity: 0.52;
   }
-}
+} */
 
 /* Optional rolling scanline - can be removed for better performance */
-.crt-scanline {
+/* .crt-scanline {
   position: absolute;
   top: 0;
   left: 0;
@@ -237,7 +238,7 @@ body {
   z-index: 5;
   animation: roll 4s linear infinite;
   will-change: transform;
-}
+} */
 
 .crt-content:focus {
   outline: none;
