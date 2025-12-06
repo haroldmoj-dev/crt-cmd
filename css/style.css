@@ -90,7 +90,8 @@ body {
   width: 90vw;
   max-width: 50rem;
   aspect-ratio: 4/3;
-  min-height: 400px; /* Prevent shrinking too much */
+  height: 80vh;
+  min-height: 400px;
   background: #000;
   border-radius: 1.25rem;
   padding: 2.5rem;
@@ -354,4 +355,8 @@ body.low-perf .terminal-input {
 
 body.low-perf .crt-glow {
   animation: none;
+}
+
+* {
+  /* outline: 1px solid red; */
 }
