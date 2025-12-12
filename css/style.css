@@ -70,7 +70,7 @@ h6 {
 /* General setup */
 
 html {
-  font-size: clamp(15px, calc(13.588px + 0.441vw), 18px);
+  font-size: clamp(12px, calc(10.545px + 0.455vw), 16px);
 }
 
 /* CRT effect */
@@ -84,31 +84,33 @@ body {
 
 .crt-container {
   margin: 5rem 20px;
+  padding: 1rem;
   width: 40rem;
+  max-width: 40rem;
   height: 40rem;
   background: #000;
   border-radius: 1.2rem;
   box-shadow: 0 0 6.25rem rgba(0, 255, 100, 0.3);
+  overflow: hidden;
 }
 
 .crt-screen {
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 3rem;
-  border-radius: 1.2rem;
   background: #000;
 }
 
 .crt-content {
+  padding: 1rem;
   width: 100%;
   height: 100%;
   color: #00ff00;
   font-size: 1rem;
   overflow-y: scroll;
-  will-change: transform; /* TODO: Check this later */
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 255, 0, 0.6) #001100;
+  will-change: transform; /* TODO: Check this later */
   z-index: 1;
 }
 
