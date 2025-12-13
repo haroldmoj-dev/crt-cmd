@@ -8,42 +8,46 @@
     <title>CRT CMD</title>
   </head>
   <body>
-    <button class="perf-toggle" onclick="togglePerformance()">
-      Performance Mode: High
-    </button>
-    <div class="crt-container">
-      <div class="crt-screen">
-        <div class="crt-glow"></div>
-        <div class="crt-content" id="content">
-          <div class="terminal-output">
-            <div style="margin-bottom: 1.25rem">
-              ╔════════════════════════════╗<br />
-              ║ RETRO TERMINAL SYSTEM v1.0 ║<br />
-              ╚════════════════════════════╝<br />
-              © 2025 Spring. All Rights Reserved.
-            </div>
-            <div>
-              > Initializing CRT display...<br />
-              > Loading visual effects... DONE<br />
-              > System ready.<br /><br />
+    <div class="top-container">
+      <button class="perf-toggle" onclick="togglePerformance()">
+        Performance Mode: High
+      </button>
+    </div>
+    <div class="middle-container">
+      <div class="crt-container">
+        <div class="crt-screen">
+          <div class="crt-glow"></div>
+          <div class="crt-content" id="content">
+            <div class="terminal-output">
+              <div style="margin-bottom: 1.25rem">
+                ╔════════════════════════════╗<br />
+                ║ RETRO TERMINAL SYSTEM v1.0 ║<br />
+                ╚════════════════════════════╝<br />
+                © 2025 Spring. All Rights Reserved.
+              </div>
+              <div>
+                > Initializing CRT display...<br />
+                > Loading visual effects... DONE<br />
+                > System ready.<br /><br />
 
-              Welcome to the CRT screen simulator.<br />
-              Available commands: help, clear, echo [text], date<br /><br />
+                Welcome to the CRT screen simulator.<br />
+                Available commands: help, clear, echo [text], date<br /><br />
+              </div>
+            </div>
+            <div class="terminal-input-line">
+              <span class="prompt">> </span>
+              <input
+                type="text"
+                class="terminal-input"
+                autofocus
+                autocomplete="off"
+                spellcheck="false"
+              />
             </div>
           </div>
-          <div class="terminal-input-line">
-            <span class="prompt">> </span>
-            <input
-              type="text"
-              class="terminal-input"
-              autofocus
-              autocomplete="off"
-              spellcheck="false"
-            />
-          </div>
+          <span class="terminal-cursor"></span>
+          <div class="crt-scanline"></div>
         </div>
-        <span class="terminal-cursor"></span>
-        <div class="crt-scanline"></div>
       </div>
     </div>
   </body>

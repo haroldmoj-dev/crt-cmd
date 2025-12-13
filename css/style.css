@@ -76,14 +76,46 @@ html {
 /* CRT effect */
 
 body {
+  height: 100vh;
   background: #0a0a0a;
+  font-family: "Courier New", monospace;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Performance toggle button */
+.perf-toggle {
+  padding: 0.625rem 0.9375rem;
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  font-family: "Courier New", monospace;
+  cursor: pointer;
+  border-radius: 0.3125rem;
+  font-size: 0.75rem;
+  z-index: 1000;
+}
+
+.perf-toggle:hover {
+  background: rgba(0, 255, 0, 0.2);
+}
+
+.middle-container {
   display: flex;
   justify-content: center;
-  font-family: "Courier New", monospace;
+  align-items: center;
+  margin: auto 0;
 }
 
 .crt-container {
-  margin: 5rem 20px;
+  margin: 1rem 20px;
   padding: 1rem;
   width: 40rem;
   max-width: 40rem;
@@ -107,6 +139,7 @@ body {
   height: 100%;
   color: #00ff00;
   font-size: 1rem;
+  overflow-x: hidden;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 255, 0, 0.6) #001100;
@@ -217,8 +250,8 @@ body {
     -0.08rem 0 0 rgba(0, 255, 255, 0.3);
 }
 
-/* Optional rolling scanline - can be removed for better performance */
-/* .crt-scanline {
+/* Scanline */
+.crt-scanline {
   position: absolute;
   top: 0;
   left: 0;
@@ -234,7 +267,7 @@ body {
   z-index: 5;
   animation: roll 4s linear infinite;
   will-change: transform;
-} */
+}
 
 .crt-content:focus {
   outline: none;
@@ -284,26 +317,6 @@ body {
   background: rgba(0, 255, 0, 0.3);
 }
 
-/* Performance toggle button */
-.perf-toggle {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  padding: 0.625rem 0.9375rem;
-  background: rgba(0, 255, 0, 0.1);
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  font-family: "Courier New", monospace;
-  cursor: pointer;
-  border-radius: 0.3125rem;
-  font-size: 0.75rem;
-  z-index: 1000;
-}
-
-.perf-toggle:hover {
-  background: rgba(0, 255, 0, 0.2);
-}
-
 /* Low performance mode */
 body.low-perf .crt-screen::before,
 body.low-perf .crt-screen::after,
@@ -322,5 +335,5 @@ body.low-perf .terminal-input {
 }
 
 * {
-  /* outline: 1px solid red; */
+  outline: 1px solid red;
 }
