@@ -306,6 +306,7 @@ body {
 
 .terminal-input {
   padding: 0;
+  flex: 1;
   background: transparent;
   border: none;
   outline: none;
