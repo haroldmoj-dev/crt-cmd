@@ -139,6 +139,7 @@ body {
   width: 100%;
   height: 100%;
   background: #000;
+  overflow: hidden;
 }
 
 .crt-content {
@@ -251,13 +252,6 @@ body {
   }
 }
 
-/* Text shadow (RGB shift) */
-.crt-content,
-.terminal-input {
-  text-shadow: 0.08rem 0 0 rgba(255, 0, 0, 0.3),
-    -0.08rem 0 0 rgba(0, 255, 255, 0.3);
-}
-
 /* Scanline */
 .crt-scanline {
   position: absolute;
@@ -273,27 +267,26 @@ body {
   );
   pointer-events: none;
   z-index: 5;
-  animation: roll 4s linear infinite;
-  will-change: transform;
-}
-
-.crt-content:focus {
-  outline: none;
-}
-
-.crt-content:empty::before {
-  content: "Type here...";
-  color: rgba(0, 255, 0, 0.5);
-  pointer-events: none;
+  animation: roll 6s linear infinite;
+  will-change: transform, opacity;
 }
 
 @keyframes roll {
   0% {
-    transform: translateY(-0.625rem);
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  66% {
+    transform: translateY(calc(100% + 40rem));
   }
   100% {
-    transform: translateY(calc(100% + 100vh));
+    transform: translateY(calc(100% + 40rem));
+    opacity: 0;
   }
+}
+
+.crt-content:focus {
+  outline: none;
 }
 
 .terminal-output {
@@ -323,6 +316,13 @@ body {
 
 .terminal-input::selection {
   background: rgba(0, 255, 0, 0.3);
+}
+
+/* Text shadow (RGB shift) */
+.crt-content,
+.terminal-input {
+  text-shadow: 0.08rem 0 0 rgba(255, 0, 0, 0.3),
+    -0.08rem 0 0 rgba(0, 255, 255, 0.3);
 }
 
 /* Low performance mode */
