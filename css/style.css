@@ -329,5 +329,5 @@ body.low-perf .crt-content * {
 }
 
 * {
-  outline: 1px solid red;
+  /* outline: 1px solid red; */
 }
