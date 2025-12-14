@@ -1,4 +1,4 @@
-.crt-content {
+.terminal-content {
   padding: 1rem;
   width: 100%;
   height: 100%;
@@ -10,7 +10,7 @@
 }
 
 /* Text color and shadow (RGB shift) */
-.crt-content * {
+.terminal-content * {
   overflow-wrap: break-word;
   color: #00ff00;
   font-size: 1rem;
@@ -19,11 +19,11 @@
 }
 
 /* Highlighting text */
-.crt-content *::selection {
+.terminal-content *::selection {
   background: rgba(0, 255, 0, 0.3);
 }
 
-.crt-content:focus {
+.terminal-content:focus {
   outline: none;
 }
 

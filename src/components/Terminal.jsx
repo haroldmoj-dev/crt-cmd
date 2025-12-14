@@ -23,7 +23,7 @@ const Terminal = () => {
           <br />
           Welcome to the CRT screen simulator.
           <br />
-          Available commands: help, clear, echo [text], date
+          Available commands: help, clear, echo [text], date, tetris
           <br />
           <br />
         </>
@@ -41,13 +41,15 @@ const Terminal = () => {
     const lower = cmd.toLowerCase();
 
     if (lower === "help") {
-      return "Available commands: help, clear, echo [text], date";
+      return "Available commands: help, clear, echo [text], date, tetris";
     } else if (lower === "clear") {
       return null; // Special case for clear
     } else if (lower.startsWith("echo ")) {
       return cmd.substring(5);
     } else if (lower === "date") {
       return new Date().toString();
+    } else if (lower === "tetris") {
+      // TODO: add the component <Terminal /> to middle container in App.jsx
     } else {
       return `Command not found: ${cmd}`;
     }
@@ -91,7 +93,7 @@ const Terminal = () => {
       <div className="crt-screen">
         <div className="crt-glow"></div>
         <div
-          className="crt-content"
+          className="terminal-content"
           ref={contentRef}
           onClick={handleContentClick}
         >
