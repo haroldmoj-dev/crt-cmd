@@ -27,6 +27,6 @@ body.low-perf .crt-glow {
   background: none;
 }
 
-body.low-perf .crt-content * {
+body.low-perf .terminal-content * {
   text-shadow: none;
 }
