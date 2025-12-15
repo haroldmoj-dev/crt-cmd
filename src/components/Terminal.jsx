@@ -60,13 +60,16 @@ const Terminal = ({ onNavigate }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !isTyping) {
       const command = inputValue.trim();
       if (command) {
         if (command.toLowerCase() === "clear") {
           setHistory(initialHistory);
         } else {
           const response = processCommand(command);
+          if (response) {
+            setIsTyping(true);
+          }
           setHistory((prev) => [
             ...prev,
             { type: "command", content: command, animated: false },
@@ -76,10 +79,6 @@ const Terminal = ({ onNavigate }) => {
         setInputValue("");
       }
     }
-  };
-
-  const handleContentClick = () => {
-    inputRef.current?.focus();
   };
 
   useEffect(() => {
@@ -92,6 +91,12 @@ const Terminal = ({ onNavigate }) => {
     inputRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    if (!isTyping) {
+      inputRef.current?.focus();
+    }
+  }, [isTyping]);
+
   return (
     <div className="crt-container">
       <div className="crt-screen">
@@ -100,43 +105,59 @@ const Terminal = ({ onNavigate }) => {
         <div
           className="terminal-content"
           ref={contentRef}
-          onClick={handleContentClick}
+          onClick={() => inputRef.current?.focus()}
         >
           <div className="terminal-output">
-            {history.map((item, index) => (
-              <div key={index}>
-                {item.type === "command" ? (
-                  <div className="terminal-output-line">
-                    <span className="prompt">&gt;&nbsp;</span>
-                    <div className="command">{item.content}</div>
-                  </div>
-                ) : item.type === "response" ? (
-                  <div style={{ marginBottom: "1rem" }}>
-                    {item.animated ? (
-                      <Typewriter text={item.content} speed={30} />
-                    ) : (
-                      item.content
-                    )}
-                  </div>
-                ) : (
-                  <div>{item.content}</div>
-                )}
-              </div>
-            ))}
+            {history.map((item, index) => {
+              const isLast = index === history.length - 1;
+              return (
+                <div key={index}>
+                  {item.type === "command" ? (
+                    <div className="terminal-output-line">
+                      <span className="prompt">&gt;&nbsp;</span>
+                      <div className="command">{item.content}</div>
+                    </div>
+                  ) : item.type === "response" ? (
+                    <div style={{ marginBottom: "1rem" }}>
+                      {item.animated ? (
+                        <Typewriter
+                          text={item.content}
+                          speed={30}
+                          onComplete={
+                            isLast ? () => setIsTyping(false) : undefined
+                          }
+                        />
+                      ) : (
+                        item.content
+                      )}
+                    </div>
+                  ) : (
+                    <div>{item.content}</div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-          <div className="terminal-input-line">
-            <span className="prompt">&gt;&nbsp;</span>
-            <input
-              ref={inputRef}
-              type="text"
-              className="terminal-input"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              autoComplete="off"
-              spellCheck="false"
-            />
-          </div>
+          {!isTyping ? (
+            <div className="terminal-input-line">
+              <span className="prompt">&gt;&nbsp;</span>
+              <input
+                ref={inputRef}
+                type="text"
+                className="terminal-input"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoComplete="off"
+                spellCheck="false"
+              />
+            </div>
+          ) : (
+            <div className="terminal-input-line">
+              <span className="prompt">&gt;&nbsp;</span>
+              <span className="typing-cursor">█</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

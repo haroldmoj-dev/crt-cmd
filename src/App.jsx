@@ -19,7 +19,7 @@ function App() {
         </button>
       </div>
       <div className="middle-container">
-        <Terminal onNavigate={setCurrentView} />
+        {currentView === "terminal" && <Terminal onNavigate={setCurrentView} />}
         {currentView === "tetris" && <Tetris onNavigate={setCurrentView} />}
       </div>
       <div className="bottom-container"></div>
