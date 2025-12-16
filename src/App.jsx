@@ -14,6 +14,7 @@ function App() {
   };
 
   const toggleTab = () => {
+    if (isTransitioning) return;
     setCurrentView((prev) => (prev === "terminal" ? "tetris" : "terminal"));
   };
 
@@ -46,9 +47,7 @@ function App() {
             <div className="crt-glow"></div>
             <div className="crt-scanline"></div>
             <div
-              className={`container ${
-                isTransitioning ? "fade-out" : "fade-in"
-              }`}
+              className={`content ${isTransitioning ? "fade-out" : "fade-in"}`}
             >
               {displayedView === "terminal" && (
                 <Terminal onNavigate={setCurrentView} isLowPerf={isLowPerf} />
