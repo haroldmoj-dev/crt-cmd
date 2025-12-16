@@ -19,8 +19,16 @@ function App() {
         </button>
       </div>
       <div className="middle-container">
-        {currentView === "terminal" && <Terminal onNavigate={setCurrentView} />}
-        {currentView === "tetris" && <Tetris onNavigate={setCurrentView} />}
+        <div className="crt-container">
+          <div className="crt-screen">
+            <div className="crt-glow"></div>
+            <div className="crt-scanline"></div>
+            {currentView === "terminal" && (
+              <Terminal onNavigate={setCurrentView} />
+            )}
+            {currentView === "tetris" && <Tetris onNavigate={setCurrentView} />}
+          </div>
+        </div>
       </div>
       <div className="bottom-container"></div>
     </div>
