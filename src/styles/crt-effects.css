@@ -146,6 +146,7 @@
   }
 }
 
+/* Transition between tabs */
 .content {
   position: relative;
   overflow: hidden;
@@ -177,6 +178,10 @@
 @keyframes cover {
   from {
     transform: translateY(-100%);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-75%);
   }
   to {
     transform: translateY(0%);
@@ -189,6 +194,10 @@
 @keyframes uncover {
   from {
     transform: translateY(0%);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(25%);
   }
   to {
     transform: translateY(100%);

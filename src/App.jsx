@@ -19,17 +19,21 @@ function App() {
     setCurrentView((prev) => (prev === "terminal" ? "tetris" : "terminal"));
   };
 
+  // Apply transition effect when switching tabs
   useEffect(() => {
     if (!hasMounted) {
       setHasMounted(true);
       return;
     }
-
-    setIsTransitioning(true);
-    setTimeout(() => {
+    if (isLowPerf) {
       setDisplayedView(currentView);
-      setIsTransitioning(false);
-    }, 2000);
+    } else {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setDisplayedView(currentView);
+        setIsTransitioning(false);
+      }, 1000);
+    }
   }, [currentView]);
 
   return (
@@ -54,7 +58,9 @@ function App() {
             <div className="crt-scanline"></div>
             <div
               className={`content ${
-                !hasMounted
+                isLowPerf
+                  ? ""
+                  : !hasMounted
                   ? "fade-in"
                   : isTransitioning
                   ? "fade-out"
