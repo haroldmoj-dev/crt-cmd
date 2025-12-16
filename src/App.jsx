@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Terminal from "./components/Terminal";
 import Tetris from "./components/Tetris";
 
 function App() {
   const [isLowPerf, setIsLowPerf] = useState(false);
   const [currentView, setCurrentView] = useState("terminal");
+  const [displayedView, setDisplayedView] = useState("terminal");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const togglePerformance = () => {
     setIsLowPerf(!isLowPerf);
@@ -14,6 +16,14 @@ function App() {
   const toggleTab = () => {
     setCurrentView((prev) => (prev === "terminal" ? "tetris" : "terminal"));
   };
+
+  useEffect(() => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setDisplayedView(currentView);
+      setIsTransitioning(false);
+    }, 500);
+  }, [currentView]);
 
   return (
     <div className="outer-container">
@@ -35,12 +45,18 @@ function App() {
           <div className="crt-screen">
             <div className="crt-glow"></div>
             <div className="crt-scanline"></div>
-            {currentView === "terminal" && (
-              <Terminal onNavigate={setCurrentView} isLowPerf={isLowPerf} />
-            )}
-            {currentView === "tetris" && (
-              <Tetris onNavigate={setCurrentView} isLowPerf={isLowPerf} />
-            )}
+            <div
+              className={`container ${
+                isTransitioning ? "fade-out" : "fade-in"
+              }`}
+            >
+              {displayedView === "terminal" && (
+                <Terminal onNavigate={setCurrentView} isLowPerf={isLowPerf} />
+              )}
+              {displayedView === "tetris" && (
+                <Tetris onNavigate={setCurrentView} isLowPerf={isLowPerf} />
+              )}
+            </div>
           </div>
         </div>
       </div>
