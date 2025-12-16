@@ -23,7 +23,7 @@ function App() {
     setTimeout(() => {
       setDisplayedView(currentView);
       setIsTransitioning(false);
-    }, 500);
+    }, 2000);
   }, [currentView]);
 
   return (

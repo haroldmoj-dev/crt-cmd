@@ -147,15 +147,50 @@
 }
 
 .content {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 100%;
 }
 
-.fade-out {
-  opacity: 0;
-  transition: opacity 0.25s;
+.content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  height: 120%;
+  top: -10%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.1) 0rem,
+    #000 0.3rem,
+    #000 calc(100% - 0.3rem),
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  transform: translateY(-100%);
 }
-.fade-in {
-  opacity: 1;
-  transition: opacity 0.25s;
+
+.fade-out::after {
+  animation: cover 1s linear forwards;
+}
+@keyframes cover {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.fade-in::after {
+  animation: uncover 1s linear forwards;
+}
+@keyframes uncover {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(100%);
+  }
 }
