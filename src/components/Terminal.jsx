@@ -8,21 +8,21 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
       type: "output",
       content: (
         <>
-          ╔═════════════════════════════╗
+          ===============================
           <br />
           ║ SPRING TERMINAL SYSTEM v1.0 ║
           <br />
-          ╚═════════════════════════════╝
+          ===============================
           <br />© 2025 Spring. All Rights Reserved.
           <br />
-          &gt; Initializing CRT display...
+          &gt; Loading functionality... DONE
           <br />
           &gt; Loading visual effects... DONE
           <br />
           &gt; System ready.
           <br />
           <br />
-          Welcome to the CRT screen simulator.
+          Welcome to Spring's Terminal.
           <br />
           Available commands: help, clear, echo [text], date, tetris
           <br />
@@ -88,6 +88,7 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
     setHistory((prev) =>
       prev.map((item, i) => (i === index ? { ...item, animated: false } : item))
     );
+    setIsTyping(false);
   };
 
   // Focus once component loads
@@ -142,10 +143,7 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
                     <Typewriter
                       text={item.content}
                       speed={30}
-                      onComplete={() => {
-                        markAnimatedComplete(index);
-                        setIsTyping(false);
-                      }}
+                      onComplete={() => markAnimatedComplete(index)}
                     />
                   ) : (
                     item.content
