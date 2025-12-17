@@ -13,12 +13,13 @@ const TetrisHome = ({ onNavigate, isLowPerf }) => {
       const command = inputValue.trim();
       if (command) {
         if (command.toLowerCase() === "y" || command.toLowerCase() === "yes") {
-          // TODO: Go to TetrisPlay
           setIsBuffering(true);
+          // TODO: Go to TetrisPlay
         } else if (
           command.toLowerCase() === "n" ||
           command.toLowerCase() === "no"
         ) {
+          setIsBuffering(true);
           onNavigate("terminal");
         } else {
           setInputValue("");
