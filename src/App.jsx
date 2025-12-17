@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Terminal from "./components/Terminal";
 import Tetris from "./components/Tetris";
 

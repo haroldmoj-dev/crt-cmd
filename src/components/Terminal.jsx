@@ -13,7 +13,8 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
           ║ SPRING TERMINAL SYSTEM v1.0 ║
           <br />
           ===============================
-          <br />© 2025 Spring. All Rights Reserved.
+          <br />© 2025 Harold Mojica. All Rights Reserved.
+          <br />
           <br />
           &gt; Loading functionality... DONE
           <br />
@@ -22,9 +23,9 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
           &gt; System ready.
           <br />
           <br />
-          Welcome to Spring's Terminal.
+          Welcome to Spring Terminal.
           <br />
-          Available commands: help, clear, echo [text], date, tetris
+          Type 'help' to see available commands.
           <br />
           <br />
         </>
@@ -53,7 +54,6 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
     } else if (lower === "date") {
       return new Date().toString();
     } else if (lower === "tetris") {
-      onNavigate("tetris");
       return "Loading Tetris...";
     } else {
       return `Command not found.`;
@@ -61,7 +61,7 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
   };
 
   // Clear command animation
-  const clearHistorySequentially = () => {
+  const processClear = () => {
     if (isLowPerf) {
       setHistory(initialHistory);
       return;
@@ -80,13 +80,20 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
     }, 50);
   };
 
+  // Pause then switch to tetris tab
+  const processTetris = () => {
+    setTimeout(() => {
+      onNavigate("tetris");
+    }, 1000);
+  };
+
   // Handle all events that happen after clicking "Enter"
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !isTyping) {
       const command = inputValue.trim();
       if (command) {
         if (command.toLowerCase() === "clear") {
-          clearHistorySequentially();
+          processClear();
         } else {
           const response = processCommand(command);
           if (response && !isLowPerf) {
@@ -95,8 +102,16 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
           setHistory((prev) => [
             ...prev,
             { type: "command", content: command, animated: false },
-            { type: "response", content: response, animated: !isLowPerf },
+            {
+              type: "response",
+              content: response,
+              animated: !isLowPerf,
+              skipComplete: command.toLowerCase() === "tetris",
+            },
           ]);
+          if (command.toLowerCase() === "tetris") {
+            processTetris();
+          }
         }
         setInputValue("");
       }
@@ -162,7 +177,11 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
                   {item.animated ? (
                     <Typewriter
                       text={item.content}
-                      onComplete={() => markAnimatedComplete(index)}
+                      onComplete={() => {
+                        if (!item.skipComplete) {
+                          markAnimatedComplete(index);
+                        }
+                      }}
                     />
                   ) : (
                     item.content
