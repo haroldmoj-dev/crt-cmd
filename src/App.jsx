@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Terminal from "./components/Terminal";
 import TetrisHome from "./components/TetrisHome";
+import TetrisPlay from "./components/TetrisPlay";
 
 function App() {
   const [isLowPerf, setIsLowPerf] = useState(false);
@@ -18,7 +19,7 @@ function App() {
 
   const toggleTab = () => {
     if (isTransitioning) return;
-    setCurrentView((prev) => (prev === "terminal" ? "tetris" : "terminal"));
+    setCurrentView((prev) => (prev === "terminal" ? "thome" : "terminal"));
   };
 
   // Apply transition effect when switching tabs
@@ -56,7 +57,7 @@ function App() {
           Active Tab:
           {currentView === "terminal"
             ? " Terminal"
-            : currentView === "tetris"
+            : currentView === "thome" || currentView === "tplay"
             ? " Tetris"
             : ""}
         </button>
@@ -80,8 +81,11 @@ function App() {
               {displayedView === "terminal" && (
                 <Terminal onNavigate={setCurrentView} isLowPerf={isLowPerf} />
               )}
-              {displayedView === "tetris" && (
+              {displayedView === "thome" && (
                 <TetrisHome onNavigate={setCurrentView} isLowPerf={isLowPerf} />
+              )}
+              {displayedView === "tplay" && (
+                <TetrisPlay onNavigate={setCurrentView} isLowPerf={isLowPerf} />
               )}
             </div>
           </div>

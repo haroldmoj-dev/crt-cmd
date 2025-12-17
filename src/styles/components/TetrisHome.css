@@ -1,4 +1,4 @@
-.tetris.content {
+.thome.content {
   padding: 1rem;
   width: 100%;
   height: 100%;
@@ -12,7 +12,7 @@
 }
 
 /* Text color and shadow (RGB shift) */
-.tetris.content * {
+.thome.content * {
   overflow-wrap: break-word;
   color: #00ff00;
   font-size: 1rem;
@@ -21,7 +21,7 @@
 }
 
 /* Highlighting text */
-.tetris.content *::selection {
+.thome.content *::selection {
   background: rgba(0, 255, 0, 0.3);
 }
 
@@ -30,12 +30,12 @@
   text-align: center;
 }
 
-.tetris-input-line {
+.thome-input-line {
   display: flex;
   align-items: baseline;
 }
 
-.tetris-input {
+.thome-input {
   padding: 0;
   background: transparent;
   border: none;
@@ -44,6 +44,6 @@
   text-align: center;
 }
 
-.tetris-input.no-cursor {
+.thome-input.no-cursor {
   caret-color: transparent;
 }

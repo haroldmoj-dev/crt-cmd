@@ -80,10 +80,10 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
     }, 50);
   };
 
-  // Pause then switch to tetris tab
+  // Pause then switch to tetris tab (high perf)
   const processTetris = () => {
     setTimeout(() => {
-      onNavigate("tetris");
+      onNavigate("thome");
     }, 1000);
   };
 
@@ -95,7 +95,7 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
         if (command.toLowerCase() === "clear") {
           processClear();
         } else if (command.toLowerCase() === "tetris" && isLowPerf) {
-          onNavigate("tetris");
+          onNavigate("thome");
         } else {
           const response = processCommand(command);
           if (response && !isLowPerf) {

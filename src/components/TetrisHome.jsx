@@ -14,7 +14,7 @@ const TetrisHome = ({ onNavigate, isLowPerf }) => {
       if (command) {
         if (command.toLowerCase() === "y" || command.toLowerCase() === "yes") {
           setIsBuffering(true);
-          // TODO: Go to TetrisPlay
+          onNavigate("tplay");
         } else if (
           command.toLowerCase() === "n" ||
           command.toLowerCase() === "no"
@@ -34,17 +34,17 @@ const TetrisHome = ({ onNavigate, isLowPerf }) => {
   }, []);
 
   return (
-    <div className="tetris content" onClick={() => inputRef.current?.focus()}>
+    <div className="thome content" onClick={() => inputRef.current?.focus()}>
       <div className="title">"TETRIS"</div>
       <div className="menu">
         <div>Welcome to Tetris. </div>
         <div>Would you like to start the game (Y/N)? </div>
       </div>
-      <div className="tetris-input-line">
+      <div className="thome-input-line">
         <input
           ref={inputRef}
           type="text"
-          className={`tetris-input ${isBuffering ? "no-cursor" : ""}`}
+          className={`thome-input ${isBuffering ? "no-cursor" : ""}`}
           value={inputValue}
           onChange={(e) => {
             if (!isBuffering) setInputValue(e.target.value);
