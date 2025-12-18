@@ -37,6 +37,7 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
   const [inputValue, setInputValue] = useState("");
   const [history, setHistory] = useState(initialHistory);
   const [isTyping, setIsTyping] = useState(false);
+  const [hasTypingCursor, setHasTypingCursor] = useState(true);
 
   const inputRef = useRef(null);
   const contentRef = useRef(null);
@@ -80,11 +81,13 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
     }, 50);
   };
 
-  // Pause then switch to tetris tab (high perf)
+  // Switch to tetris tab
   const processTetris = () => {
-    setTimeout(() => {
-      onNavigate("thome");
-    }, 1000);
+    if (!isLowPerf) {
+      setHasTypingCursor(false);
+      setIsTyping(true);
+    }
+    onNavigate("thome");
   };
 
   // Handle all events that happen after clicking "Enter"
@@ -92,30 +95,29 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
     if (e.key === "Enter" && !isTyping) {
       const command = inputValue.trim();
       if (command) {
-        if (command.toLowerCase() === "clear") {
-          processClear();
-        } else if (command.toLowerCase() === "tetris" && isLowPerf) {
-          onNavigate("thome");
+        if (command.toLowerCase() === "tetris") {
+          processTetris();
         } else {
-          const response = processCommand(command);
-          if (response && !isLowPerf) {
-            setIsTyping(true);
+          if (command.toLowerCase() === "clear") {
+            processClear();
+          } else {
+            const response = processCommand(command);
+            if (response && !isLowPerf) {
+              setIsTyping(true);
+            }
+            setHistory((prev) => [
+              ...prev,
+              { type: "command", content: command, animated: false },
+              {
+                type: "response",
+                content: response,
+                animated: !isLowPerf,
+                skipComplete: false,
+              },
+            ]);
           }
-          setHistory((prev) => [
-            ...prev,
-            { type: "command", content: command, animated: false },
-            {
-              type: "response",
-              content: response,
-              animated: !isLowPerf,
-              skipComplete: command.toLowerCase() === "tetris",
-            },
-          ]);
-          if (command.toLowerCase() === "tetris") {
-            processTetris();
-          }
+          setInputValue("");
         }
-        setInputValue("");
       }
     }
   };
@@ -200,7 +202,9 @@ const Terminal = ({ onNavigate, isLowPerf }) => {
       <div className="terminal input-line">
         <span className="prompt">&gt;&nbsp;</span>
         {/* When typing is blocked (Typewriter animation running) */}
-        {isTyping && <span className="typing-cursor">█</span>}
+        {isTyping && hasTypingCursor && (
+          <span className="typing-cursor">█</span>
+        )}
         <input
           ref={inputRef}
           type="text"

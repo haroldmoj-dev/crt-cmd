@@ -2,9 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import "../styles/components/TetrisPlay.css";
 
 const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
-  // Board dimensions
+  // Board dimensions and tetris pieces
   const ROWS = 18;
   const COLS = 15;
+  const I_PIECE = [[1, 1, 1]];
+  const L_PIECE = [
+    [1, 0],
+    [1, 1],
+  ];
 
   // Create empty board (2D array filled with 0s)
   const createEmptyBoard = () => {
@@ -15,10 +20,17 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
 
   const [isFastDrop, setIsFastDrop] = useState(false);
   const [board, setBoard] = useState(createEmptyBoard());
-  const [currentPiece, setCurrentPiece] = useState({
-    x: 6,
-    y: 0,
-    shape: [[1, 1, 1]],
+  const [currentPiece, setCurrentPiece] = useState(() => {
+    const initialShape =
+      hasI && hasL
+        ? Math.random() < 0.5
+          ? I_PIECE
+          : L_PIECE
+        : hasI
+        ? I_PIECE
+        : L_PIECE;
+
+    return { x: 6, y: 0, shape: initialShape };
   });
 
   // Check if piece can move to a position
@@ -78,13 +90,27 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
 
     const dropInterval = setInterval(() => {
       setCurrentPiece((prev) => {
-        // A) Move piece down
         if (canMove(prev, prev.x, prev.y + 1)) {
+          // Move piece down
           return { ...prev, y: prev.y + 1 };
-          // B) Lock piece then generate a new one
         } else {
+          // Lock piece
           lockPiece(prev);
-          return { x: 6, y: 0, shape: [[1, 1, 1]] };
+
+          // Generate new piece
+          let newPiece;
+          if (hasI && hasL) {
+            newPiece =
+              Math.random() < 0.5
+                ? { x: 6, y: 0, shape: I_PIECE }
+                : { x: 6, y: 0, shape: L_PIECE };
+          } else if (hasI) {
+            newPiece = { x: 6, y: 0, shape: I_PIECE };
+          } else if (hasL) {
+            newPiece = { x: 6, y: 0, shape: L_PIECE };
+          }
+
+          return newPiece;
         }
       });
     }, intervalTime);
