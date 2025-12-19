@@ -36,15 +36,11 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
   const boardRef = useRef(board);
 
   // Check if piece can move to a position
-  const canMove = (piece, newX, newY) => {
+  const canMove = (shape, newX, newY) => {
     const b = boardRef.current;
-    for (let rowIndex = 0; rowIndex < piece.shape.length; rowIndex++) {
-      for (
-        let colIndex = 0;
-        colIndex < piece.shape[rowIndex].length;
-        colIndex++
-      ) {
-        if (piece.shape[rowIndex][colIndex]) {
+    for (let rowIndex = 0; rowIndex < shape.length; rowIndex++) {
+      for (let colIndex = 0; colIndex < shape[rowIndex].length; colIndex++) {
+        if (shape[rowIndex][colIndex]) {
           const boardRow = newY + rowIndex;
           const boardCol = newX + colIndex;
 
@@ -116,7 +112,7 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
 
     const dropInterval = setInterval(() => {
       setCurrentPiece((prev) => {
-        if (canMove(prev, prev.x, prev.y + 1)) {
+        if (canMove(prev.shape, prev.x, prev.y + 1)) {
           // Move piece down
           return { ...prev, y: prev.y + 1 };
         } else {
@@ -136,7 +132,12 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
             newPiece = { x: 6, y: 0, shape: L_PIECE };
           }
 
-          return newPiece;
+          if (canMove(newPiece.shape, newPiece.x, newPiece.y)) {
+            return newPiece;
+          } else {
+            // TODO Later: End game
+            return newPiece;
+          }
         }
       });
     }, intervalTime);
@@ -181,11 +182,15 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
     const handleKeyDown = (e) => {
       if (e.key === "ArrowLeft") {
         setCurrentPiece((prev) =>
-          canMove(prev, prev.x - 1, prev.y) ? { ...prev, x: prev.x - 1 } : prev
+          canMove(prev.shape, prev.x - 1, prev.y)
+            ? { ...prev, x: prev.x - 1 }
+            : prev
         );
       } else if (e.key === "ArrowRight") {
         setCurrentPiece((prev) =>
-          canMove(prev, prev.x + 1, prev.y) ? { ...prev, x: prev.x + 1 } : prev
+          canMove(prev.shape, prev.x + 1, prev.y)
+            ? { ...prev, x: prev.x + 1 }
+            : prev
         );
       } else if (e.key === "ArrowDown") {
         setIsFastDrop(true);
@@ -193,7 +198,7 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
         setCurrentPiece((prev) => {
           const rotated = rotatePiece(prev);
 
-          return canMove(rotated, rotated.x, rotated.y) ? rotated : prev;
+          return canMove(rotated.shape, rotated.x, rotated.y) ? rotated : prev;
         });
       }
     };
