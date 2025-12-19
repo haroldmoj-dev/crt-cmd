@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -15,7 +15,6 @@
   justify-content: center;
   gap: 0.5rem;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .control {
@@ -23,18 +22,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 5rem;
-  min-width: 5rem;
+  overflow: hidden;
   background: rgba(0, 255, 0, 0.1);
   border: 1px solid #00ff00;
   color: #00ff00;
   font-family: "Courier New", monospace;
-  font-size: 3rem;
+  font-size: 2.5rem;
   cursor: pointer;
   border-radius: 0.3125rem;
   z-index: 1000;
 }
 
-.control:hover {
+.control:active {
   background: rgba(0, 255, 0, 0.2);
 }
