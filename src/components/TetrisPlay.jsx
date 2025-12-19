@@ -154,17 +154,25 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
       Array.from({ length: rows }, (_, j) => shape[rows - 1 - j][i])
     );
 
-    // L-piece (crosswise)
+    // I-piece (crosswise)
     if (shape.length === 1) {
       return { x: piece.x + 1, y: piece.y - 1, shape: rotated };
     }
-    // L-piece (lengthwise)
+    // I-piece (lengthwise)
     else if (shape.length === 3) {
       return { x: piece.x - 1, y: piece.y + 1, shape: rotated };
     }
-    // Other pieces
-    else {
-      return { ...piece, shape: rotated };
+    // L-piece
+    else if (shape.length === 2) {
+      if (!shape[0][1]) {
+        return { ...piece, y: piece.y + 1, shape: rotated };
+      } else if (!shape[1][1]) {
+        return { ...piece, x: piece.x - 1, shape: rotated };
+      } else if (!shape[1][0]) {
+        return { ...piece, y: piece.y - 1, shape: rotated };
+      } else if (!shape[0][0]) {
+        return { ...piece, x: piece.x + 1, shape: rotated };
+      }
     }
   };
 
