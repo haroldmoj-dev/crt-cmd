@@ -27,8 +27,13 @@ function App() {
     setCurrentView((prev) => (prev === "terminal" ? "thome" : "terminal"));
   };
 
-  const simulateKey = (key) => {
+  // Buttons simulating keyboard keys
+  const simulateKeyDown = (key) => {
     window.dispatchEvent(new KeyboardEvent("keydown", { key }));
+  };
+
+  const simulateKeyUp = (key) => {
+    window.dispatchEvent(new KeyboardEvent("keyup", { key }));
   };
 
   // Apply transition effect when switching tabs
@@ -107,43 +112,45 @@ function App() {
             <div className="top-controls">
               <button
                 className="control"
-                onClick={() => simulateKey("ArrowUp")}
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  simulateKeyDown("ArrowUp");
+                }}
               >
                 ▲
               </button>
             </div>
-
             <div className="bottom-controls">
               <button
                 className="control"
-                onClick={() => simulateKey("ArrowLeft")}
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  simulateKeyDown("ArrowLeft");
+                }}
               >
                 ◀
               </button>
               <button
                 className="control"
-                onPointerDown={() => simulateKey("ArrowDown")}
-                onPointerUp={() =>
-                  window.dispatchEvent(
-                    new KeyboardEvent("keyup", { key: "ArrowDown" })
-                  )
-                }
-                onPointerLeave={() =>
-                  window.dispatchEvent(
-                    new KeyboardEvent("keyup", { key: "ArrowDown" })
-                  )
-                }
-                onPointerCancel={() =>
-                  window.dispatchEvent(
-                    new KeyboardEvent("keyup", { key: "ArrowDown" })
-                  )
-                }
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  simulateKeyDown("ArrowDown");
+                }}
+                onPointerUp={(e) => {
+                  e.preventDefault();
+                  simulateKeyUp("ArrowDown");
+                }}
+                onPointerLeave={() => simulateKeyUp("ArrowDown")}
+                onPointerCancel={() => simulateKeyUp("ArrowDown")}
               >
                 ▼
               </button>
               <button
                 className="control"
-                onClick={() => simulateKey("ArrowRight")}
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  simulateKeyDown("ArrowRight");
+                }}
               >
                 ▶
               </button>

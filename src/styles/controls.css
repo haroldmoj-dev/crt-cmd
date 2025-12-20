@@ -31,6 +31,10 @@
   cursor: pointer;
   border-radius: 0.3125rem;
   z-index: 1000;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .control:active {
