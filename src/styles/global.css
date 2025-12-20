@@ -78,6 +78,15 @@ body {
   font-family: "Courier New", monospace;
 }
 
+@font-face {
+  font-family: "Courier New";
+  src: url("../../public/fonts/CourierNewPSMT.woff2") format("woff2"),
+    url("CourierNewPSMT.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* * {
   outline: 1px solid red;
 } */
