@@ -28,12 +28,20 @@ function App() {
   };
 
   // Buttons simulating keyboard keys
-  const simulateKeyDown = (key) => {
-    window.dispatchEvent(new KeyboardEvent("keydown", { key }));
+  const simulateKeyDown = (keyOrCode) => {
+    const event = new KeyboardEvent("keydown", {
+      code: keyOrCode,
+      key: keyOrCode === "Space" ? " " : keyOrCode,
+    });
+    window.dispatchEvent(event);
   };
 
-  const simulateKeyUp = (key) => {
-    window.dispatchEvent(new KeyboardEvent("keyup", { key }));
+  const simulateKeyUp = (keyOrCode) => {
+    const event = new KeyboardEvent("keyup", {
+      code: keyOrCode,
+      key: keyOrCode === "Space" ? " " : keyOrCode,
+    });
+    window.dispatchEvent(event);
   };
 
   // Apply transition effect when switching tabs
@@ -108,10 +116,11 @@ function App() {
           </div>
         </div>
         {hasControls ? (
-          <div className="controls-container">
-            <div className="top-controls">
+          <div className="controls-container gameboy">
+            {/* D-Pad */}
+            <div className="dpad">
               <button
-                className="control"
+                className="dpad-btn up"
                 onPointerDown={(e) => {
                   e.preventDefault();
                   simulateKeyDown("ArrowUp");
@@ -119,10 +128,9 @@ function App() {
               >
                 ▲
               </button>
-            </div>
-            <div className="bottom-controls">
+
               <button
-                className="control"
+                className="dpad-btn left"
                 onPointerDown={(e) => {
                   e.preventDefault();
                   simulateKeyDown("ArrowLeft");
@@ -130,29 +138,54 @@ function App() {
               >
                 ◀
               </button>
+
+              <button className="dpad-btn center" aria-hidden />
+
               <button
-                className="control"
-                onPointerDown={(e) => {
-                  e.preventDefault();
-                  simulateKeyDown("ArrowDown");
-                }}
-                onPointerUp={(e) => {
-                  e.preventDefault();
-                  simulateKeyUp("ArrowDown");
-                }}
-                onPointerLeave={() => simulateKeyUp("ArrowDown")}
-                onPointerCancel={() => simulateKeyUp("ArrowDown")}
-              >
-                ▼
-              </button>
-              <button
-                className="control"
+                className="dpad-btn right"
                 onPointerDown={(e) => {
                   e.preventDefault();
                   simulateKeyDown("ArrowRight");
                 }}
               >
                 ▶
+              </button>
+
+              <button
+                className="dpad-btn down"
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  simulateKeyDown("ArrowDown");
+                }}
+                onPointerUp={() => simulateKeyUp("ArrowDown")}
+                onPointerLeave={() => simulateKeyUp("ArrowDown")}
+                onPointerCancel={() => simulateKeyUp("ArrowDown")}
+              >
+                ▼
+              </button>
+            </div>
+
+            {/* A / B Buttons */}
+            <div className="action-buttons">
+              <button
+                className="action-btn b"
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  simulateKeyDown("ArrowUp");
+                }}
+              >
+                B
+              </button>
+
+              <button
+                className="action-btn a"
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  simulateKeyDown("Space");
+                }}
+                onPointerUp={() => simulateKeyUp("Space")}
+              >
+                A
               </button>
             </div>
           </div>

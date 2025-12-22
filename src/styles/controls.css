@@ -1,42 +1,94 @@
-.controls-container {
+.controls-container.gameboy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   max-width: 40rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
+  padding: 1rem;
 }
 
-.top-controls,
-.bottom-controls {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  align-items: center;
+/* ==== D-PAD ==== */
+.dpad {
+  position: relative;
+  width: 8rem;
+  height: 8rem;
 }
 
-.control {
-  flex: 1;
+.dpad-btn {
+  position: absolute;
+  width: 2.6rem;
+  height: 2.6rem;
+  background: #1a1a1a;
+  border: 0.15rem solid #333;
+  color: #ccc;
+  font-size: 1.2rem;
+  border-radius: 0.4rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  background: rgba(0, 255, 0, 0.1);
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  font-family: "Courier New", monospace;
-  font-size: 2.5rem;
-  cursor: pointer;
-  border-radius: 0.3125rem;
-  z-index: 1000;
-  touch-action: none;
   user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
 }
 
-.control:active {
-  background: rgba(0, 255, 0, 0.2);
+.dpad-btn:active {
+  background: #111;
+}
+
+/* positions */
+.dpad-btn.up {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.dpad-btn.down {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.dpad-btn.left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.dpad-btn.right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dpad-btn.center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #0d0d0d;
+  border-radius: 0.3rem;
+}
+
+/* ==== A / B BUTTONS ==== */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  transform: rotate(-15deg);
+}
+
+.action-btn {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #5a1a1a;
+  border: 0.15rem solid #8b2b2b;
+  color: #ffdddd;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.action-btn:active {
+  background: #3d1111;
+}
+
+.action-btn.a {
+  background: #7a1a1a;
+}
+
+.action-btn.b {
+  background: #5a1a1a;
 }

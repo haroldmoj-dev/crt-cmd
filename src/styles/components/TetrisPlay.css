@@ -33,11 +33,34 @@
 
 /* Game board */
 .game-board {
+  position: relative;
   display: flex;
   flex-direction: column;
   border: 0.1rem solid #00ff00;
   background: rgba(0, 0, 0, 0.5);
   padding: 0.25rem;
+}
+
+/* Countdown*/
+.countdown-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.countdown-number {
+  font-size: 6rem;
+  color: #00ff00;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 1rem rgba(0, 255, 0, 0.8);
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 /* Board row */

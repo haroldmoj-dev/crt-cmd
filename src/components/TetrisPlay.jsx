@@ -18,23 +18,37 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
       .map(() => Array(COLS).fill(0));
   };
 
+  const spawnRandomPiece = () => {
+    if (hasI && hasL) {
+      return Math.random() < 0.5
+        ? { x: 6, y: 0, shape: I_PIECE }
+        : { x: 6, y: 0, shape: L_PIECE };
+    }
+    if (hasI) {
+      return { x: 6, y: 0, shape: I_PIECE };
+    } else if (hasL) {
+      return { x: 6, y: 0, shape: L_PIECE };
+    }
+  };
+
+  const [countdown, setCountdown] = useState(3);
   const [isPaused, setIsPaused] = useState(false);
   const [score, setScore] = useState(0);
   const [isFastDrop, setIsFastDrop] = useState(false);
   const [board, setBoard] = useState(createEmptyBoard());
-  const [currentPiece, setCurrentPiece] = useState(() => {
-    const initialShape =
-      hasI && hasL
-        ? Math.random() < 0.5
-          ? I_PIECE
-          : L_PIECE
-        : hasI
-        ? I_PIECE
-        : L_PIECE;
-
-    return { x: 6, y: 0, shape: initialShape };
-  });
+  const [currentPiece, setCurrentPiece] = useState(spawnRandomPiece());
+  const [isGameOver, setIsGameOver] = useState(false);
   const boardRef = useRef(board);
+  const dropIntervalRef = useRef(null);
+
+  const resetGame = () => {
+    setCountdown(3);
+    setIsPaused(false);
+    setIsGameOver(false);
+    setBoard(createEmptyBoard());
+    setCurrentPiece(spawnRandomPiece());
+    setScore(0);
+  };
 
   // Check if piece can move to a position
   const canMove = (shape, newX, newY) => {
@@ -102,6 +116,17 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
     boardRef.current = clearedBoard;
   };
 
+  // Countdown
+  useEffect(() => {
+    if (countdown === null || isPaused) return;
+
+    const timer = setTimeout(() => {
+      setCountdown((c) => (c > 1 ? c - 1 : null));
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [countdown, isPaused]);
+
   // Update ref whenever board changes
   useEffect(() => {
     boardRef.current = board;
@@ -114,14 +139,12 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
     }
   }, [isPaused]);
 
-  // Gravity
-  useEffect(() => {
-    if (isPaused) {
-      return;
-    }
+  // Start gravity
+  const startGravity = () => {
+    if (dropIntervalRef.current) clearInterval(dropIntervalRef.current);
 
     const intervalTime = isFastDrop ? 50 : 500;
-    const dropInterval = setInterval(() => {
+    dropIntervalRef.current = setInterval(() => {
       setCurrentPiece((prev) => {
         if (canMove(prev.shape, prev.x, prev.y + 1)) {
           // Move piece down
@@ -129,32 +152,29 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
         } else {
           // Lock piece and clear lines
           lockPiece(prev);
-
           // Generate new piece
-          let newPiece;
-          if (hasI && hasL) {
-            newPiece =
-              Math.random() < 0.5
-                ? { x: 6, y: 0, shape: I_PIECE }
-                : { x: 6, y: 0, shape: L_PIECE };
-          } else if (hasI) {
-            newPiece = { x: 6, y: 0, shape: I_PIECE };
-          } else if (hasL) {
-            newPiece = { x: 6, y: 0, shape: L_PIECE };
-          }
-
+          const newPiece = spawnRandomPiece();
           if (canMove(newPiece.shape, newPiece.x, newPiece.y)) {
             return newPiece;
           } else {
-            // TODO Later: End game
-            return newPiece;
+            setIsGameOver(true);
+            return prev;
           }
         }
       });
     }, intervalTime);
+  };
 
-    return () => clearInterval(dropInterval);
-  }, [isFastDrop, isPaused]);
+  // Gravity
+  useEffect(() => {
+    if (!isPaused && countdown === null && !isGameOver) {
+      startGravity();
+    }
+
+    return () => {
+      if (dropIntervalRef.current) clearInterval(dropIntervalRef.current);
+    };
+  }, [isFastDrop, isPaused, countdown, isGameOver]);
 
   // Rotate piece using UP key
   const rotatePiece = (piece) => {
@@ -188,15 +208,49 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
     }
   };
 
+  // Hard drop using space key
+  const hardDrop = (piece) => {
+    let dropY = piece.y;
+
+    while (canMove(piece.shape, piece.x, dropY + 1)) {
+      dropY++;
+    }
+
+    return { ...piece, y: dropY };
+  };
+
   // Keyboard controls for moving the piece
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+      }
+
       if (e.key === "Escape") {
+        if (isGameOver) return;
         setIsPaused((prev) => !prev);
         return;
       }
 
-      if (isPaused) return;
+      if (isPaused || countdown !== null || isGameOver) return;
+
+      if (e.code === "Space") {
+        e.preventDefault();
+        setIsFastDrop(false);
+
+        const dropped = hardDrop(currentPiece);
+        lockPiece(dropped);
+
+        const newPiece = spawnRandomPiece();
+        if (canMove(newPiece.shape, newPiece.x, newPiece.y)) {
+          setCurrentPiece(newPiece);
+          startGravity();
+        } else {
+          setIsGameOver(true);
+        }
+
+        return;
+      }
 
       if (e.key === "ArrowLeft") {
         setCurrentPiece((prev) =>
@@ -215,7 +269,6 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
       } else if (e.key === "ArrowUp") {
         setCurrentPiece((prev) => {
           const rotated = rotatePiece(prev);
-
           return canMove(rotated.shape, rotated.x, rotated.y) ? rotated : prev;
         });
       }
@@ -234,7 +287,7 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [board, isPaused]);
+  }, [board, isPaused, countdown, isGameOver, currentPiece]);
 
   // Display piece on board
   const getBoardWithPiece = () => {
@@ -265,26 +318,47 @@ const TetrisPlay = ({ onNavigate, isLowPerf, hasI = true, hasL = true }) => {
   return (
     <div className="tplay content">
       <div className="tetris-game">
-        <div className="score">{score}</div>
+        <div className={`score ${countdown !== null ? "hidden" : ""}`}>
+          {score}
+        </div>
         <div className="game-board">
-          {displayBoard.map((row, rowIndex) => (
-            <div key={rowIndex} className="board-row">
-              {row.map((cell, colIndex) => (
-                <div
-                  key={colIndex}
-                  className={`board-cell ${cell ? "filled" : "empty"}`}
-                />
-              ))}
+          {countdown !== null && (
+            <div className="countdown-overlay">
+              <div className="countdown-number">{countdown}</div>
             </div>
-          ))}
+          )}
+          <div
+            className={`board-content ${countdown !== null ? "hidden" : ""}`}
+          >
+            {displayBoard.map((row, rowIndex) => (
+              <div key={rowIndex} className="board-row">
+                {row.map((cell, colIndex) => (
+                  <div
+                    key={colIndex}
+                    className={`board-cell ${cell ? "filled" : "empty"}`}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       {isPaused && (
         <div className="pause-menu">
           <div className="pause-content">
-            <h2>PAUSED</h2>
+            <div>PAUSED</div>
             <button onClick={() => setIsPaused(false)}>Resume</button>
-            <button>Restart</button>
+            <button onClick={resetGame}>Restart</button>
+            <button onClick={() => onNavigate("thome")}>Quit</button>
+          </div>
+        </div>
+      )}
+      {isGameOver && (
+        <div className="pause-menu">
+          <div className="pause-content">
+            <div>GAME OVER</div>
+            <div className="final-score">Score: {score}</div>
+            <button onClick={resetGame}>Restart</button>
             <button onClick={() => onNavigate("thome")}>Quit</button>
           </div>
         </div>
